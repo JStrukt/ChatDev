@@ -1,5 +1,5 @@
 function append_message(role, text, avatarUrl) {
-  
+
   var message_container = $("<div></div>").addClass("message-container");
   var avatar_element = $("<span></span>").addClass("avatar");
   var role_element = $("<p></p>").addClass("role").text(role);
@@ -27,10 +27,10 @@ function append_message(role, text, avatarUrl) {
 
   copyButton.click(function () {
     copyToClipboard(parsedText);
-    copyButton.text("Copied"); 
+    copyButton.text("Copied");
     setTimeout(function () {
-      copyButton.text("Copy"); 
-    }, 5000); 
+      copyButton.text("Copy");
+    }, 5000);
   });
 
   message_container.append(copyButton); // Append the copy button
@@ -135,5 +135,3 @@ $(document).ready(function () {
     get_new_messages();
   }, 1000);
 });
-
-

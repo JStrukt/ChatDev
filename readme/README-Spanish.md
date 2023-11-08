@@ -154,7 +154,7 @@ un paquete de software y generará una carpeta llamada ``/WareHouse/2048_THUNLP_
 
 ```
 @misc{qian2023communicative,
-      title={Agentes Comunicativos para Desarrollo de Software}, 
+      title={Agentes Comunicativos para Desarrollo de Software},
       author={Chen Qian y Xin Cong y Wei Liu y Cheng Yang y Weize Chen y Yusheng Su y Yufan Dang y Jiahao Li y Juyuan Xu y Dahai Li y Zhiyuan Liu y Maosong Sun},
       year={2023},
       eprint={2307.07924},

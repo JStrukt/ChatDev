@@ -124,7 +124,7 @@ then go to [Local Demo Website](http://127.0.0.1:8000/) to see an online visuali
 - You can run ``python3 online_log/app.py &`` first to start a background program so that you can use online log with a WebUI.
 
 ### Copy the generated software out of Docker
-- run 
+- run
     ```commandline
     docker cp container_id:/path/in/container /path/on/host
     ```
@@ -372,4 +372,3 @@ then go to [Local Demo Website](http://127.0.0.1:8000/) to see an online visuali
     ```
     If you add and commit the software log file under the software folder, there will be no ``Changes not staged for commit:``
   - Some phase executions may not change the code, and thereby there is no commit. For example, the software is tested without problems and there is no modification, so the test phase would leave no commit.
-  

@@ -151,7 +151,7 @@ request一样简单。这是一个示例：执行命令`python3 run.py --task "d
 
 ```
 @misc{qian2023communicative,
-      title={Communicative Agents for Software Development}, 
+      title={Communicative Agents for Software Development},
       author={Chen Qian and Xin Cong and Wei Liu and Cheng Yang and Weize Chen and Yusheng Su and Yufan Dang and Jiahao Li and Juyuan Xu and Dahai Li and Zhiyuan Liu and Maosong Sun},
       year={2023},
       eprint={2307.07924},

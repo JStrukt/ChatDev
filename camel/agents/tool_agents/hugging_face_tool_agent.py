@@ -11,7 +11,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =========== Copyright 2023 @ CAMEL-AI.org. All Rights Reserved. ===========
-from typing import Any, Optional
+from __future__ import annotations
+
+from typing import Any
+from typing import Optional
 
 from camel.agents.tool_agents import BaseToolAgent
 
@@ -47,7 +50,7 @@ class HuggingFaceToolAgent(BaseToolAgent):
             raise ValueError(
                 "Could not import transformers tool agents. "
                 "Please setup the environment with "
-                "pip install huggingface_hub==0.14.1 transformers==4.29.0 diffusers accelerate datasets torch soundfile sentencepiece opencv-python"
+                "pip install huggingface_hub==0.14.1 transformers==4.29.0 diffusers accelerate datasets torch soundfile sentencepiece opencv-python",
             )
         self.agent = OpenAiAgent(*args, **kwargs)
         self.name = name
@@ -80,7 +83,7 @@ rivers_and_lakes_image.save("./rivers_and_lakes_image.png")
 sea_add_island_image = {self.name}.step("Draw me a picture of the sea then transform the picture to add an island")
 sea_add_island_image.save("./sea_add_island_image.png")
 
-# If you'd like to keep a state across executions or to pass non-text objects to the agent, 
+# If you'd like to keep a state across executions or to pass non-text objects to the agent,
 # you can do so by specifying variables that you would like the agent to use. For example,
 # you could generate the first image of rivers and lakes, and ask the model to update that picture to add an island by doing the following:
 picture = {self.name}.step("Generate a picture of rivers and lakes.")
@@ -148,7 +151,7 @@ segmented_transformed_capybara_image.save("./segmented_transformed_capybara_imag
     def step(
         self,
         *args: Any,
-        remote: Optional[bool] = None,
+        remote: bool | None = None,
         **kwargs: Any,
     ) -> Any:
         r"""Runs the agent in single execution mode.
@@ -169,7 +172,7 @@ segmented_transformed_capybara_image.save("./segmented_transformed_capybara_imag
     def chat(
         self,
         *args: Any,
-        remote: Optional[bool] = None,
+        remote: bool | None = None,
         **kwargs: Any,
     ) -> Any:
         r"""Runs the agent in a chat conversation mode.

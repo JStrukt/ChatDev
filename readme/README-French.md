@@ -64,8 +64,8 @@ Pour commencer, suivez ces étapes:
    cd ChatDev
    pip3 install -r requirements.txt
    ```
-4. **Définir la clé API OpenAI:** Exportez votre clé API OpenAI en tant que variable d'environnement. Remplacez `" your_OpenAI_API_key "` par 
-votre clé API proprement dite. Rappelez-vous que cette variable d'environnement est spécifique à une session, vous devez donc la 
+4. **Définir la clé API OpenAI:** Exportez votre clé API OpenAI en tant que variable d'environnement. Remplacez `" your_OpenAI_API_key "` par
+votre clé API proprement dite. Rappelez-vous que cette variable d'environnement est spécifique à une session, vous devez donc la
 redéfinir à chaque nouvelle instance de terminal.
    Sous Unix/Linux :
    ```
@@ -107,30 +107,30 @@ Sur Unix/Linux :
 Pour plus d'informations détaillées, veuillez consulter notre [Wiki](../wiki.md), où vous pouvez trouver :
 
 - Une introduction à tous les paramètres d'exécution de la commande.
-- Un guide simple pour configurer une démo web locale, incluant des logs visualisés améliorés, une démo de revision, et un 
+- Un guide simple pour configurer une démo web locale, incluant des logs visualisés améliorés, une démo de revision, et un
 simple visualiseur ChatChain.
 - Un aperçu du framework ChatDev.
 - Une introduction complète à tous les paramètres avancés de la configuration ChatChain.
 - Des guides pour personnaliser ChatDev, y compris :
- - ChatChain : Concevez votre propre processus de développement de logiciel (ou tout autre processus), 
+ - ChatChain : Concevez votre propre processus de développement de logiciel (ou tout autre processus),
    comme ``AnalyseDeLaDemande -> Codage -> Test -> Manuel``.
  - Phase : Concevez votre propre phase au sein de ChatChain, comme ``AnalyseDeLaDemande``.
  - Rôle : Définissez les différents agents de votre entreprise, comme le ``Directeur Général``.
 
 ## 🤗 Partagez Votre Logiciel !
 
-**Code** : Nous sommes enthousiastes à l'idée de votre intérêt à participer à notre projet open-source. Si vous rencontrez des 
+**Code** : Nous sommes enthousiastes à l'idée de votre intérêt à participer à notre projet open-source. Si vous rencontrez des
 problèmes, n'hésitez pas à les signaler. N'hésitez pas à créer une demande de pull si vous avez des questions ou si vous êtes
 prêt à partager votre travail avec nous ! Vos contributions sont très appréciées. Faites-moi savoir s'il y a autre chose dont
 vous avez besoin !
 
-**Entreprise** : Créer votre propre "ChatDev Entreprise" personnalisée est un jeu d'enfant. Cette configuration personnalisée 
-implique trois simples fichiers JSON de configuration. Consultez l'exemple fourni dans le répertoire ``CompanyConfig/Default``. Pour des 
+**Entreprise** : Créer votre propre "ChatDev Entreprise" personnalisée est un jeu d'enfant. Cette configuration personnalisée
+implique trois simples fichiers JSON de configuration. Consultez l'exemple fourni dans le répertoire ``CompanyConfig/Default``. Pour des
 instructions détaillées sur la personnalisation, reportez-vous à notre [Wiki](../wiki.md).
 
-**Logiciel** : Chaque fois que vous développez un logiciel avec ChatDev, un dossier correspondant est généré contenant toutes les 
-informations essentielles. Partager votre travail avec nous est aussi simple que de faire une demande de pull. Voici un exemple : 
-exécutez la commande ``python3 run.py --task "concevoir un jeu 2048" --name "2048"  --org "THUNLP" --config "Default"``. Ceci 
+**Logiciel** : Chaque fois que vous développez un logiciel avec ChatDev, un dossier correspondant est généré contenant toutes les
+informations essentielles. Partager votre travail avec nous est aussi simple que de faire une demande de pull. Voici un exemple :
+exécutez la commande ``python3 run.py --task "concevoir un jeu 2048" --name "2048"  --org "THUNLP" --config "Default"``. Ceci
 créera un paquet logiciel et générera un dossier nommé ``/WareHouse/2048_THUNLP_timestamp``. A l'intérieur, vous trouverez :
 
 - Tous les fichiers et documents relatifs au logiciel de jeu 2048
@@ -162,7 +162,7 @@ de ``CompanyConfig/Default``
 
 ```
 @misc{qian2023communicative,
-      title={Communicative Agents for Software Development}, 
+      title={Communicative Agents for Software Development},
       author={Chen Qian and Xin Cong and Wei Liu and Cheng Yang and Weize Chen and Yusheng Su and Yufan Dang and Jiahao Li and Juyuan Xu and Dahai Li and Zhiyuan Liu and Maosong Sun},
       year={2023},
       eprint={2307.07924},

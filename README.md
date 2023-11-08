@@ -30,7 +30,7 @@
   <p align="center">
   <img src='./misc/increment.png' width=700>
   </p>
-  
+
 * October 26th, 2023: ChatDev is now supported with Docker for safe execution (thanks to contribution from [ManindraDeMel](https://github.com/ManindraDeMel)). Please see [Docker Start Guide](wiki.md#docker-start).
   <p align="center">
   <img src='./misc/docker.png' width=400>
@@ -116,7 +116,7 @@ To get started, follow these steps:
    cd WareHouse/project_name_DefaultOrganization_timestamp
    python main.py
    ```
-   
+
 ### 🐳 Quickstart with Docker
 - We thank [ManindraDeMel](https://github.com/ManindraDeMel) for providing Docker support. Please see [Docker Start Guide](wiki.md#docker-start).
 
@@ -170,7 +170,7 @@ Made with [contrib.rocks](https://contrib.rocks).
 
 ```
 @misc{qian2023communicative,
-      title={Communicative Agents for Software Development}, 
+      title={Communicative Agents for Software Development},
       author={Chen Qian and Xin Cong and Wei Liu and Cheng Yang and Weize Chen and Yusheng Su and Yufan Dang and Jiahao Li and Juyuan Xu and Dahai Li and Zhiyuan Liu and Maosong Sun},
       year={2023},
       eprint={2307.07924},

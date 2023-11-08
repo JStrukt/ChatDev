@@ -11,8 +11,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =========== Copyright 2023 @ CAMEL-AI.org. All Rights Reserved. ===========
+from __future__ import annotations
+
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
 
 from tenacity import retry
 from tenacity.stop import stop_after_attempt
@@ -20,14 +25,16 @@ from tenacity.wait import wait_exponential
 
 from camel.agents import BaseAgent
 from camel.configs import ChatGPTConfig
-from camel.messages import ChatMessage, MessageType, SystemMessage
-from camel.model_backend import ModelBackend, ModelFactory
-from camel.typing import ModelType, RoleType
-from camel.utils import (
-    get_model_token_limit,
-    num_tokens_from_messages,
-    openai_api_key_required,
-)
+from camel.messages import ChatMessage
+from camel.messages import MessageType
+from camel.messages import SystemMessage
+from camel.model_backend import ModelBackend
+from camel.model_backend import ModelFactory
+from camel.typing import ModelType
+from camel.typing import RoleType
+from camel.utils import get_model_token_limit
+from camel.utils import num_tokens_from_messages
+from camel.utils import openai_api_key_required
 
 
 @dataclass(frozen=True)
@@ -43,19 +50,23 @@ class ChatAgentResponse:
             to terminate the chat session.
         info (Dict[str, Any]): Extra information about the chat message.
     """
-    msgs: List[ChatMessage]
+    msgs: list[ChatMessage]
     terminated: bool
-    info: Dict[str, Any]
+    info: dict[str, Any]
 
     @property
     def msg(self):
         if self.terminated:
-            raise RuntimeError("error in ChatAgentResponse, info:{}".format(str(self.info)))
+            raise RuntimeError(f"error in ChatAgentResponse, info:{str(self.info)}")
         if len(self.msgs) > 1:
-            raise RuntimeError("Property msg is only available for a single message in msgs")
+            raise RuntimeError(
+                "Property msg is only available for a single message in msgs",
+            )
         elif len(self.msgs) == 0:
             if len(self.info) > 0:
-                raise RuntimeError("Empty msgs in ChatAgentResponse, info:{}".format(str(self.info)))
+                raise RuntimeError(
+                    f"Empty msgs in ChatAgentResponse, info:{str(self.info)}",
+                )
             else:
                 # raise RuntimeError("Known issue that msgs is empty and there is no error info, to be fix")
                 return None
@@ -77,26 +88,28 @@ class ChatAgent(BaseAgent):
     """
 
     def __init__(
-            self,
-            system_message: SystemMessage,
-            model: Optional[ModelType] = None,
-            model_config: Optional[Any] = None,
-            message_window_size: Optional[int] = None,
+        self,
+        system_message: SystemMessage,
+        model: ModelType | None = None,
+        model_config: Any | None = None,
+        message_window_size: int | None = None,
     ) -> None:
-
         self.system_message: SystemMessage = system_message
         self.role_name: str = system_message.role_name
         self.role_type: RoleType = system_message.role_type
-        self.model: ModelType = (model if model is not None else ModelType.GPT_3_5_TURBO)
+        self.model: ModelType = model if model is not None else ModelType.GPT_3_5_TURBO
         self.model_config: ChatGPTConfig = model_config or ChatGPTConfig()
         self.model_token_limit: int = get_model_token_limit(self.model)
-        self.message_window_size: Optional[int] = message_window_size
-        self.model_backend: ModelBackend = ModelFactory.create(self.model, self.model_config.__dict__)
+        self.message_window_size: int | None = message_window_size
+        self.model_backend: ModelBackend = ModelFactory.create(
+            self.model,
+            self.model_config.__dict__,
+        )
         self.terminated: bool = False
         self.info: bool = False
         self.init_messages()
 
-    def reset(self) -> List[MessageType]:
+    def reset(self) -> list[MessageType]:
         r"""Resets the :obj:`ChatAgent` to its initial state and returns the
         stored messages.
 
@@ -108,12 +121,12 @@ class ChatAgent(BaseAgent):
         return self.stored_messages
 
     def get_info(
-            self,
-            id: Optional[str],
-            usage: Optional[Dict[str, int]],
-            termination_reasons: List[str],
-            num_tokens: int,
-    ) -> Dict[str, Any]:
+        self,
+        id: str | None,
+        usage: dict[str, int] | None,
+        termination_reasons: list[str],
+        num_tokens: int,
+    ) -> dict[str, Any]:
         r"""Returns a dictionary containing information about the chat session.
 
         Args:
@@ -138,9 +151,9 @@ class ChatAgent(BaseAgent):
         r"""Initializes the stored messages list with the initial system
         message.
         """
-        self.stored_messages: List[MessageType] = [self.system_message]
+        self.stored_messages: list[MessageType] = [self.system_message]
 
-    def update_messages(self, message: ChatMessage) -> List[MessageType]:
+    def update_messages(self, message: ChatMessage) -> list[MessageType]:
         r"""Updates the stored messages list with a new message.
 
         Args:
@@ -156,8 +169,8 @@ class ChatAgent(BaseAgent):
     @retry(wait=wait_exponential(min=5, max=60), stop=stop_after_attempt(5))
     @openai_api_key_required
     def step(
-            self,
-            input_message: ChatMessage,
+        self,
+        input_message: ChatMessage,
     ) -> ChatAgentResponse:
         r"""Performs a single step in the chat session by generating a response
         to the input message.
@@ -172,10 +185,16 @@ class ChatAgent(BaseAgent):
                 session.
         """
         messages = self.update_messages(input_message)
-        if self.message_window_size is not None and len(
-                messages) > self.message_window_size:
-            messages = [self.system_message
-                        ] + messages[-self.message_window_size:]
+        if (
+            self.message_window_size is not None
+            and len(
+                messages,
+            )
+            > self.message_window_size
+        ):
+            messages = [
+                self.system_message,
+            ] + messages[-self.message_window_size :]
         openai_messages = [message.to_openai_message() for message in messages]
         num_tokens = num_tokens_from_messages(openai_messages, self.model)
 
@@ -184,16 +203,20 @@ class ChatAgent(BaseAgent):
         #     print("{}\t{}\t{}".format(openai_message["role"], hash(openai_message["content"]), openai_message["content"][:60].replace("\n", "")))
         # print()
 
-        output_messages: Optional[List[ChatMessage]]
-        info: Dict[str, Any]
+        output_messages: list[ChatMessage] | None
+        info: dict[str, Any]
 
         if num_tokens < self.model_token_limit:
             response = self.model_backend.run(messages=openai_messages)
             if not isinstance(response, dict):
                 raise RuntimeError("OpenAI returned unexpected struct")
             output_messages = [
-                ChatMessage(role_name=self.role_name, role_type=self.role_type,
-                            meta_dict=dict(), **dict(choice["message"]))
+                ChatMessage(
+                    role_name=self.role_name,
+                    role_type=self.role_type,
+                    meta_dict=dict(),
+                    **dict(choice["message"]),
+                )
                 for choice in response["choices"]
             ]
             info = self.get_info(

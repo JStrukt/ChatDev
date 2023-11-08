@@ -11,8 +11,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =========== Copyright 2023 @ CAMEL-AI.org. All Rights Reserved. ===========
+from __future__ import annotations
+
 from dataclasses import dataclass
-from typing import Dict, Optional
+from typing import Dict
+from typing import Optional
 
 from camel.messages import BaseMessage
 from camel.typing import RoleType
@@ -33,7 +36,7 @@ class ChatMessage(BaseMessage):
     """
     role_name: str
     role_type: RoleType
-    meta_dict: Optional[Dict[str, str]]
+    meta_dict: dict[str, str] | None
     role: str
     content: str = ""
 
@@ -64,7 +67,7 @@ class AssistantChatMessage(ChatMessage):
     """
     role_name: str
     role_type: RoleType = RoleType.ASSISTANT
-    meta_dict: Optional[Dict[str, str]] = None
+    meta_dict: dict[str, str] | None = None
     role: str = "user"
     content: str = ""
 
@@ -84,6 +87,6 @@ class UserChatMessage(ChatMessage):
     """
     role_name: str
     role_type: RoleType = RoleType.USER
-    meta_dict: Optional[Dict[str, str]] = None
+    meta_dict: dict[str, str] | None = None
     role: str = "user"
     content: str = ""

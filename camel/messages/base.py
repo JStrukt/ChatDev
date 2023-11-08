@@ -11,18 +11,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # =========== Copyright 2023 @ CAMEL-AI.org. All Rights Reserved. ===========
-from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Tuple, Union
+from __future__ import annotations
 
-from camel.messages import (
-    OpenAIAssistantMessage,
-    OpenAIChatMessage,
-    OpenAIMessage,
-    OpenAISystemMessage,
-    OpenAIUserMessage,
-)
-from camel.prompts import CodePrompt, TextPrompt
-from camel.typing import ModelType, RoleType
+from dataclasses import dataclass
+from typing import Any
+from typing import Dict
+from typing import List
+from typing import Optional
+from typing import Tuple
+from typing import Union
+
+from camel.messages import OpenAIAssistantMessage
+from camel.messages import OpenAIChatMessage
+from camel.messages import OpenAIMessage
+from camel.messages import OpenAISystemMessage
+from camel.messages import OpenAIUserMessage
+from camel.prompts import CodePrompt
+from camel.prompts import TextPrompt
+from camel.typing import ModelType
+from camel.typing import RoleType
 
 
 @dataclass
@@ -41,7 +48,7 @@ class BaseMessage:
     """
     role_name: str
     role_type: RoleType
-    meta_dict: Optional[Dict[str, str]]
+    meta_dict: dict[str, str] | None
     role: str
     content: str
 
@@ -55,11 +62,9 @@ class BaseMessage:
         Returns:
             Any: The attribute value.
         """
-        delegate_methods = [
-            method for method in dir(str) if not method.startswith('_')
-        ]
+        delegate_methods = [method for method in dir(str) if not method.startswith("_")]
         if name in delegate_methods:
-            content = super().__getattribute__('content')
+            content = super().__getattribute__("content")
             if isinstance(content, str):
                 content_method = getattr(content, name, None)
                 if callable(content_method):
@@ -91,20 +96,25 @@ class BaseMessage:
                             Any: The result of the delegate method.
                         """
                         modified_args = [modify_arg(arg) for arg in args]
-                        modified_kwargs = {
-                            k: modify_arg(v)
-                            for k, v in kwargs.items()
-                        }
-                        output = content_method(*modified_args,
-                                                **modified_kwargs)
-                        return self._create_new_instance(output) if isinstance(
-                            output, str) else output
+                        modified_kwargs = {k: modify_arg(v) for k, v in kwargs.items()}
+                        output = content_method(
+                            *modified_args,
+                            **modified_kwargs,
+                        )
+                        return (
+                            self._create_new_instance(output)
+                            if isinstance(
+                                output,
+                                str,
+                            )
+                            else output
+                        )
 
                     return wrapper
 
         return super().__getattribute__(name)
 
-    def _create_new_instance(self, content: str) -> "BaseMessage":
+    def _create_new_instance(self, content: str) -> BaseMessage:
         r"""Create a new instance of the :obj:`BaseMessage` with updated
         content.
 
@@ -114,12 +124,15 @@ class BaseMessage:
         Returns:
             BaseMessage: The new instance of :obj:`BaseMessage`.
         """
-        return self.__class__(role_name=self.role_name,
-                              role_type=self.role_type,
-                              meta_dict=self.meta_dict, role=self.role,
-                              content=content)
+        return self.__class__(
+            role_name=self.role_name,
+            role_type=self.role_type,
+            meta_dict=self.meta_dict,
+            role=self.role,
+            content=content,
+        )
 
-    def __add__(self, other: Any) -> Union["BaseMessage", Any]:
+    def __add__(self, other: Any) -> BaseMessage | Any:
         r"""Addition operator override for :obj:`BaseMessage`.
 
         Args:
@@ -135,10 +148,11 @@ class BaseMessage:
         else:
             raise TypeError(
                 f"Unsupported operand type(s) for +: '{type(self)}' and "
-                f"'{type(other)}'")
+                f"'{type(other)}'",
+            )
         return self._create_new_instance(combined_content)
 
-    def __mul__(self, other: Any) -> Union["BaseMessage", Any]:
+    def __mul__(self, other: Any) -> BaseMessage | Any:
         r"""Multiplication operator override for :obj:`BaseMessage`.
 
         Args:
@@ -153,7 +167,8 @@ class BaseMessage:
         else:
             raise TypeError(
                 f"Unsupported operand type(s) for *: '{type(self)}' and "
-                f"'{type(other)}'")
+                f"'{type(other)}'",
+            )
 
     def __len__(self) -> int:
         r"""Length operator override for :obj:`BaseMessage`.
@@ -186,10 +201,12 @@ class BaseMessage:
             int: The token length of the message.
         """
         from camel.utils import num_tokens_from_messages
+
         return num_tokens_from_messages([self.to_openai_chat_message()], model)
 
     def extract_text_and_code_prompts(
-            self) -> Tuple[List[TextPrompt], List[CodePrompt]]:
+        self,
+    ) -> tuple[list[TextPrompt], list[CodePrompt]]:
         r"""Extract text and code prompts from the message content.
 
         Returns:
@@ -197,15 +214,14 @@ class BaseMessage:
                 list of text prompts and a list of code prompts extracted
                 from the content.
         """
-        text_prompts: List[TextPrompt] = []
-        code_prompts: List[CodePrompt] = []
+        text_prompts: list[TextPrompt] = []
+        code_prompts: list[CodePrompt] = []
 
         lines = self.content.split("\n")
         idx = 0
         start_idx = 0
         while idx < len(lines):
-            while idx < len(lines) and (
-                    not lines[idx].lstrip().startswith("```")):
+            while idx < len(lines) and (not lines[idx].lstrip().startswith("```")):
                 idx += 1
             text = "\n".join(lines[start_idx:idx]).strip()
             text_prompts.append(TextPrompt(text))
@@ -226,7 +242,7 @@ class BaseMessage:
 
         return text_prompts, code_prompts
 
-    def to_openai_message(self, role: Optional[str] = None) -> OpenAIMessage:
+    def to_openai_message(self, role: str | None = None) -> OpenAIMessage:
         r"""Converts the message to an :obj:`OpenAIMessage` object.
 
         Args:
@@ -244,7 +260,7 @@ class BaseMessage:
 
     def to_openai_chat_message(
         self,
-        role: Optional[str] = None,
+        role: str | None = None,
     ) -> OpenAIChatMessage:
         r"""Converts the message to an :obj:`OpenAIChatMessage` object.
 
@@ -287,7 +303,7 @@ class BaseMessage:
         """
         return {"role": "assistant", "content": self.content}
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         r"""Converts the message to a dictionary.
 
         Returns:
